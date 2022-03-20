@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/5fb9a09781.js" crossorigin="anonymous"></script>
+    <title>Document</title>
+    <style>
+        body{
+            background-color: rgb(13, 78, 0);
+        }
+        .result_wrapper{
+            display: flex;
+            justify-content: center;
+        }
+        .result{
+            color: rgb(0, 0, 0);
+            background-color: rgb(255, 255, 255);
+            border-radius: 50%;
+            border: 2px solid rgb(0, 0, 0);
+            width: 4vw;
+            height: 4vw;
+            line-height: 4vw;
+            text-align: center;
+
+        }
+        .button_wrapper{
+            display: flex;
+            justify-content: center;
+            margin: 5vh;
+                   }
+
+        .color_wrapper{
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .color_wrapper div{
+            height: 8vw;
+            width: 8vw;
+            margin: 5vw;
+            padding: 0;
+            border: 4px solid black;
+            background-color: rgb(255, 255, 255);
+            font-size: 70px;
+            color: rgb(180, 11, 11);
+            border-radius: 10%;
+            /* box-shadow: 1px 1px 1px rgb(134, 134, 134); */
+            text-shadow: 2px 2px 2px rgb(255, 255, 255);
+            text-align: center;
+            line-height: 10vw;
+            -webkit-text-stroke: 2px black; /* width and color of font border
+             */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="button_wrapper">
+        <button class="minus"><i class="fas fa-minus"></i></button>
+        <button class="start"><i class="fas fa-play"></i></button>
+        <button class="plus"><i class="fas fa-plus"></i></button>
+    </div>
+    <div class="result_wrapper"><div class="result"></div></div>
+    <div class="color_wrapper"><div class="dice"></div></div>
+
+    <script>
+
+        let minus = document.querySelector(".minus");
+        let plus = document.querySelector(".plus");
+        let start = document.querySelector(".start");
+        let wrapper = document.querySelector('.color_wrapper');
+        let dice = document.querySelectorAll(".dice");
+        let result = document.querySelector('.result');
+        let dots=0;
+        let rotate =0;
+        let marg =0;
+        let kostka;
+        let score = 0;
+        let dLength = dice.length; // dodatkowa zmienna do poprawnego wyświetlania score po odejmowaniu kostki
+
+        plus.addEventListener('click',function(){
+            kostka = document.createElement('div');
+            kostka.classList.add('dice');
+            wrapper.appendChild(kostka);
+            dice = document.querySelectorAll(".dice");
+            dLength = dice.length
+
+        })
+
+        minus.addEventListener('click',function(){
+            dice = document.querySelectorAll(".dice");
+            wrapper.removeChild(wrapper.childNodes[dice.length-1]); //Note: Whitespace inside elements is considered as text, and text is considered as nodes. Comments are also considered as nodes.
+            dLength = dice.length-1
+        })
+
+        function sound(src) {
+        this.sound = document.createElement("audio");
+        this.sound.src = "./dicesSound.mp3";
+        this.sound.setAttribute("preload", "auto");
+        this.sound.setAttribute("controls", "none");
+        this.sound.style.display = "none";
+        document.body.appendChild(this.sound);
+        this.play = function(){
+        this.sound.play();
+        }
+} 
+        start.addEventListener('click',function(){
+            for (let i = 0; i<dLength; i++){
+                rotate = (Math.random()*(170-1)+1);
+                dice[i].style.transform = `rotate(${rotate}deg)`;
+                marg = (Math.random()*(7-1)+1);
+                dice[i].style.margin = `${marg}vw`;
+                let mySound = new sound("./dicesSound.mp3");
+                mySound.play();
+                dots = Math.floor(Math.random()*(7-1)+1);
+                switch(dots){
+                    case 1:{
+                        dice[i].innerHTML='&#8226';
+                        dice[i].style.color = `red`;
+                        dice[i].style.lineHeight = '155%';
+                        score=score+1;
+                    }
+                        
+                    break;
+                    case 2:{
+                        dice[i].innerHTML= "&#8226<br>&#8226";
+                        dice[i].style.color = `orange`;
+                        dice[i].style.lineHeight = '75%';
+                        score=score+2;
+                    }
+
+                    break;
+                    case 3:{
+                        dice[i].innerHTML='<i class="fas fa-ellipsis-v"></i>';
+                        dice[i].style.color = `yellow`;
+                        dice[i].style.lineHeight = '155%';
+                        score=score+3;
+                    }
+
+                    break;
+                    case 4:{
+                        dice[i].innerHTML= "&#8226&#8226<br>&#8226&#8226";
+                        dice[i].style.color = `green`;
+                        dice[i].style.lineHeight = '75%';
+                        score=score+4;
+                    }
+
+                    break;
+                    case 5:{
+                        dice[i].innerHTML='&#8226&#8226<br>&#8226<br>&#8226&#8226';
+                        dice[i].style.color = `cyan`;}
+                        dice[i].style.lineHeight = '50%';
+                        score=score+5;
+                    break;
+                    case 6:{
+                        dice[i].innerHTML='<i class="fas fa-ellipsis-v"></i><i class="fas fa-ellipsis-v"></i>';
+                        dice[i].style.color = `blue`;
+                        dice[i].style.lineHeight = '155%';
+                        score=score+6;
+                    }
+                    break;
+                }
+                
+            }
+            console.log(score)
+            result.textContent=score;
+                score=0;
+        })
+    </script>
+</body>
+</html>
